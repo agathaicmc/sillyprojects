@@ -109,7 +109,7 @@ def dealer_turn(shotgun):
             print("\nthe dealer shot himself with a live bullet")
         else:
             print("\nthe dealer shot himself with a blank bullet")
-            dealer_turn(shotgun)
+            dealer_turn(shotgun) # erro aqui
 
 def print_hp(player, dealer):
     print("\nplayer hp: ", player.hp)
