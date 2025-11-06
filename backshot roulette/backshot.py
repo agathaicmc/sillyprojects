@@ -35,9 +35,9 @@ class Player:
         else:
             shotgun.rounds.pop()
             return False
-        
-        
 
+
+        
 class Shotgun:
     def __init__(self):
         print("loading...")
@@ -53,11 +53,11 @@ class Shotgun:
         return bullets
 
     def print_state(self):
-        print(self.state()[0], "live.", self.state()[1], "blank.")
+        print('\n', self.state()[0], "live.", self.state()[1], "blank.")
 
     def check_barrel(self):
         if self.rounds != []:
-            return
+            return False
 
         print("\nreloading...")
         time.sleep(2)
@@ -67,30 +67,34 @@ class Shotgun:
             self.rounds.append(random.choice(round_types))
 
         self.print_state()
+        return True
 
 
-def player_turn():
+def player_turn(shotgun):
+
     time.sleep(2)
     print("\nPLAYER TURN")
-    print("\ntype \"dealer\" to shoot the dealer or type \"self\" to shoot self")
+    print("\ntype \"dealer\" to shoot the dealer or type \"self\" to shoot yourself")
     player_move = input()
 
     if(player_move == "dealer"):
         if player.shoot_adversary(shotgun, dealer):
             print('\nyou shot the dealer with a live bullet')
+            return False
         else:
             print('\nyou shot the dealer with a blank bullet')
+            return False
 
     elif(player_move == "self"):
         if player.shoot_self(shotgun):
             print('\nthe bullet was blank')
-            player_turn()
+            return True
         else:
             print('\nthe bullet was live')
+            return False
     else:
-        print("invalid input")
-        player_turn()
-
+        print("\ninvalid input")
+        return True
 def dealer_turn(shotgun):
     time.sleep(2)
     print("\nDEALER TURN")
@@ -101,19 +105,26 @@ def dealer_turn(shotgun):
     if live >= blank:
         if dealer.shoot_adversary(shotgun, player):
             print("\nthe dealer shot you with a live bullet")
+            return False
         else:
             print("\nthe dealer shot you with a blank bullet")
+            return False
     
     elif blank > live:
         if not dealer.shoot_self(shotgun):
             print("\nthe dealer shot himself with a live bullet")
+            return False
         else:
             print("\nthe dealer shot himself with a blank bullet")
-            dealer_turn(shotgun) # erro aqui
+            return True
 
 def print_hp(player, dealer):
     print("\nplayer hp: ", player.hp)
     print("dealer hp: ", dealer.hp)
+
+def check_for_hp_change(player,dealer):
+    return
+
 
 player = Player()
 dealer = Player()
@@ -129,7 +140,13 @@ print_hp(player, dealer)
 while(player.hp > 0 and dealer.hp > 0):
     shotgun.check_barrel()
 
-    player_turn()
+    p = True
+
+    while(p):
+        p = player_turn()
+        if(shotgun.check_barrel()):
+            p = True
+        pass
 
     print_hp(player, dealer)
 
@@ -138,7 +155,10 @@ while(player.hp > 0 and dealer.hp > 0):
     if player.hp == 0 or dealer.hp == 0:
         break
 
-    dealer_turn(shotgun)
+    while(dealer_turn(shotgun)):
+        if(shotgun.check_barrel()):
+            break
+        pass
 
     print_hp(player, dealer)
     
