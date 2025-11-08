@@ -53,7 +53,7 @@ class Shotgun:
         return bullets
 
     def print_state(self):
-        print('\n', self.state()[0], "live.", self.state()[1], "blank.")
+        print("\n", self.state()[0], "live.", self.state()[1], "blank.")
 
     def check_barrel(self):
         if self.rounds != []:
@@ -79,22 +79,23 @@ def player_turn(shotgun):
 
     if(player_move == "dealer"):
         if player.shoot_adversary(shotgun, dealer):
-            print('\nyou shot the dealer with a live bullet')
+            print("\nyou shot the dealer with a live bullet")
             return False
         else:
-            print('\nyou shot the dealer with a blank bullet')
+            print("\nyou shot the dealer with a blank bullet")
             return False
 
     elif(player_move == "self"):
         if player.shoot_self(shotgun):
-            print('\nthe bullet was blank')
+            print("\nyou shot yourself with a blank bulet")
             return True
         else:
-            print('\nthe bullet was live')
+            print("\nyou shot yourself with a live bullet")
             return False
     else:
         print("\ninvalid input")
         return True
+    
 def dealer_turn(shotgun):
     time.sleep(2)
     print("\nDEALER TURN")
@@ -143,7 +144,7 @@ while(player.hp > 0 and dealer.hp > 0):
     p = True
 
     while(p):
-        p = player_turn()
+        p = player_turn(shotgun)
         if(shotgun.check_barrel()):
             p = True
         pass
